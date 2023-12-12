@@ -1,4 +1,5 @@
-﻿using Cibertec.Shopping.CORE.Entities;
+﻿using Cibertec.Shopping.CORE.DTOs;
+using Cibertec.Shopping.CORE.Entities;
 using Cibertec.Shopping.CORE.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,26 +10,25 @@ namespace Cibertec.Shopping.API.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly ICategoryRepository _categoryRepository;
+        private readonly ICategoryService _categoryService;
 
-        public CategoryController(ICategoryRepository categoryRepository)
+        public CategoryController(ICategoryService categoryService)
         {
-            _categoryRepository = categoryRepository;
+            _categoryService = categoryService;
+
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var categories = await _categoryRepository.GetAll();
+            var categories = await _categoryService.GetAll();
             return Ok(categories);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id, bool includeProducts = false)
         {
-            var category = includeProducts ?
-                         await _categoryRepository.GetByIdWithProducts(id) :
-                         await _categoryRepository.GetById(id);
+            var category = await _categoryService.GetById(id, includeProducts);
             if (category == null)
                 return NotFound();
 
@@ -36,9 +36,9 @@ namespace Cibertec.Shopping.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Category category)
-        {          
-            var result = await _categoryRepository.Insert(category);
+        public async Task<IActionResult> Create([FromBody] CategoryInsertDTO categoryInsertDTO)
+        {
+            var result = await _categoryService.Insert(categoryInsertDTO);
             if (!result)
                 return BadRequest();
 
@@ -46,13 +46,13 @@ namespace Cibertec.Shopping.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] Category category)
+        public async Task<IActionResult> Update(int id, [FromBody] CategoryListDTO categoryListDTO)
         {
-            if(id != category.Id)
+            if (id != categoryListDTO.Id)
                 return NotFound();
 
-            var result = await _categoryRepository.Update(category);
-            if(!result)
+            var result = await _categoryService.Update(categoryListDTO);
+            if (!result)
                 return BadRequest();
 
             return NoContent();
@@ -61,8 +61,8 @@ namespace Cibertec.Shopping.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await _categoryRepository.Delete(id);
-            if(!result)
+            var result = await _categoryService.Delete(id);
+            if (!result)
                 return BadRequest();
 
             return NoContent();

@@ -1,4 +1,5 @@
 using Cibertec.Shopping.CORE.Interfaces;
+using Cibertec.Shopping.CORE.Services;
 using Cibertec.Shopping.INFRASTRUCTURE.Data;
 using Cibertec.Shopping.INFRASTRUCTURE.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ builder.Services.AddDbContext<StoreDbcibertecContext>(options =>
 });
 
 builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
+builder.Services.AddTransient<ICategoryService, CategoryService>();
 
 
 builder.Services.AddControllers();
