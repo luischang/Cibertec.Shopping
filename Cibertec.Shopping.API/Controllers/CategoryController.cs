@@ -13,18 +13,23 @@ namespace Cibertec.Shopping.API.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
+        private readonly ILogger<CategoryController> _logger;
 
-        public CategoryController(ICategoryService categoryService)
+        public CategoryController(ICategoryService categoryService, ILogger<CategoryController> logger)
         {
             _categoryService = categoryService;
-
+            _logger = logger;
         }
 
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> GetAll()
         {
+            throw new Exception("Error to get all categories...... Admin suport SOS");
+
+            _logger.LogInformation("Initial Get all categories.....");
             var categories = await _categoryService.GetAll();
+            
             return Ok(categories);
         }
 

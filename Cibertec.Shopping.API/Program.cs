@@ -1,11 +1,22 @@
+using Cibertec.Shopping.API.Middleware;
 using Cibertec.Shopping.CORE.Interfaces;
 using Cibertec.Shopping.CORE.Services;
 using Cibertec.Shopping.INFRASTRUCTURE.Data;
 using Cibertec.Shopping.INFRASTRUCTURE.Repositories;
 using Cibertec.Shopping.INFRASTRUCTURE.Shared;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//Add Logger
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo
+    .File("Logs/CibertecShoppingLog.txt",
+    rollingInterval: RollingInterval.Minute).CreateLogger();
+
+builder.Host.UseSerilog();
 
 // Add services to the container.
 var _config = builder.Configuration;
@@ -45,5 +56,9 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 
 app.MapControllers();
+
+//Add Middleware
+app.UseMiddleware<JsonWrapperMiddleware>();
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.Run();

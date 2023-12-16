@@ -1,5 +1,6 @@
 ﻿using Cibertec.Shopping.CORE.DTOs;
 using Cibertec.Shopping.CORE.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ namespace Cibertec.Shopping.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class FavoriteController : ControllerBase
     {
         private readonly IFavoriteService _favoriteService;
