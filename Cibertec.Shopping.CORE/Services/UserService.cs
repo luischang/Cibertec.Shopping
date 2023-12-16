@@ -12,10 +12,11 @@ namespace Cibertec.Shopping.CORE.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-
-        public UserService(IUserRepository userRepository)
+        private readonly IJWTService _jwtService;
+        public UserService(IUserRepository userRepository, IJWTService jwtService)
         {
             _userRepository = userRepository;
+            _jwtService = jwtService;
         }
 
         public async Task<bool> SignUp(UserInsertDTO userInsertDTO)
@@ -47,7 +48,7 @@ namespace Cibertec.Shopping.CORE.Services
                 return null;
 
             //TODO: Generar un JWT
-            var token = "";
+            var token = _jwtService.GenerateJWToken(user);
             var userAuth = new UserAuthenticationDTO()
             {
                 Id = user.Id,

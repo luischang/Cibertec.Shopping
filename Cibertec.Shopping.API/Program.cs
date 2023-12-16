@@ -2,6 +2,7 @@ using Cibertec.Shopping.CORE.Interfaces;
 using Cibertec.Shopping.CORE.Services;
 using Cibertec.Shopping.INFRASTRUCTURE.Data;
 using Cibertec.Shopping.INFRASTRUCTURE.Repositories;
+using Cibertec.Shopping.INFRASTRUCTURE.Shared;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +24,8 @@ builder.Services.AddTransient<IFavoriteRepository, FavoriteRepository>();
 builder.Services.AddTransient<IFavoriteService, FavoriteService>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IUserService, UserService>();
+
+builder.Services.AddSharedInfrastructure(_config);
 
 
 builder.Services.AddControllers();

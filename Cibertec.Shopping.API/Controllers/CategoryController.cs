@@ -1,6 +1,7 @@
 ﻿using Cibertec.Shopping.CORE.DTOs;
 using Cibertec.Shopping.CORE.Entities;
 using Cibertec.Shopping.CORE.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +9,7 @@ namespace Cibertec.Shopping.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
@@ -19,6 +21,7 @@ namespace Cibertec.Shopping.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll()
         {
             var categories = await _categoryService.GetAll();
@@ -59,6 +62,7 @@ namespace Cibertec.Shopping.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _categoryService.Delete(id);
