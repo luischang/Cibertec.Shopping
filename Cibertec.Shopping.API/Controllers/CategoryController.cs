@@ -25,7 +25,7 @@ namespace Cibertec.Shopping.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetAll()
         {
-            throw new Exception("Error to get all categories...... Admin suport SOS");
+            //throw new Exception("Error to get all categories...... Admin suport SOS");
 
             _logger.LogInformation("Initial Get all categories.....");
             var categories = await _categoryService.GetAll();
